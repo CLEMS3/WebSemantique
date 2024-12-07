@@ -1,10 +1,14 @@
+'use client'
+
 import React from 'react';
+import Filter from '../Organisms/Filter';
+import HomeTitle from '../Molecules/HomeTitle';
 
 const HomePage: React.FC = () => {
     return (
         <div>
-            <h1>Welcome to the Home Page</h1>
-            <p>This is a basic React Next.js TypeScript page.</p>
+            <HomeTitle />
+            <Filter />
         </div>
     );
 };
