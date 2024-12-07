@@ -1,14 +1,14 @@
 'use client'
 
 import React from 'react';
-import Filter from '../Organisms/Filter';
+import SearchArea from '../Organisms/SearchArea';
 import HomeTitle from '../Molecules/HomeTitle';
 
 const HomePage: React.FC = () => {
     return (
         <div>
             <HomeTitle />
-            <Filter />
+            <SearchArea />
         </div>
     );
 };

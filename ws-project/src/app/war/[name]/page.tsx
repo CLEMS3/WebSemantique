@@ -31,7 +31,7 @@ export default function CommanderRoot() {
     }, []);
 
     return (
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <div className="h-full">
             <h1>War Page</h1>
             <p>War Name: {name}</p>
             <p>Here is a little cat fact, because war is bad, cats are good : {catFact}</p>
