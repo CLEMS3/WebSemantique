@@ -3,7 +3,8 @@
 import { useParams } from 'next/navigation';
 import {useState, useEffect} from 'react';
 import { fetchCatFact } from '../../../Services/apiService';
-
+import {WarPage} from '../../../Components/Templates/WarPage';
+ 
 export default function CommanderRoot() {
       const params = useParams();
       const name = params.name; // Access the dynamic "name" parameter
@@ -34,7 +35,7 @@ export default function CommanderRoot() {
         <div className="h-full">
             <h1>War Page</h1>
             <p>War Name: {name}</p>
-            <p>Here is a little cat fact, because war is bad, cats are good : {catFact}</p>
+            <WarPage/>
         </div>
     );
 }
