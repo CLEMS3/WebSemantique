@@ -3,9 +3,9 @@
 import { useParams } from 'next/navigation';
 import {useState, useEffect} from 'react';
 import { fetchCatFact } from '../../../Services/apiService';
-import {WarPage} from '../../../Components/Templates/WarPage';
+import {BattlePage} from '../../../Components/Templates/BattlePage';
  
-export default function WarRoot() {
+export default function BattleRoot() {
       const params = useParams();
       const name = params.name; // Access the dynamic "name" parameter
 
@@ -33,9 +33,9 @@ export default function WarRoot() {
 
     return (
         <div className="h-full">
-            <h1>War Page</h1>
-            <p>War Name: {name}</p>
-            <WarPage/>
+            <h1>Battle Page</h1>
+            <p>Battle Name: {name}</p>
+            <BattlePage/>
         </div>
     );
 }
