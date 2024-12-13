@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import React from 'react';
+import {PersonPage} from '../../../Components/Templates/PersonPage';
 
 export default function CommanderRoot() {
 //   const params = useParams();
@@ -12,9 +13,8 @@ export default function CommanderRoot() {
 //   }
 
   return (
-    <div className="h-full">
-      <h1>Commander Page</h1>
-      <p>Commander Name: </p>
+    <div className="h-screen overflow-hidden p-12 bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/La_Libert%C3%A9_guidant_le_peuple_-_Eug%C3%A8ne_Delacroix_-_Mus%C3%A9e_du_Louvre_Peintures_RF_129_-_apr%C3%A8s_restauration_2024.jpg/1024px-La_Libert%C3%A9_guidant_le_peuple_-_Eug%C3%A8ne_Delacroix_-_Mus%C3%A9e_du_Louvre_Peintures_RF_129_-_apr%C3%A8s_restauration_2024.jpg')]">
+      <PersonPage/>
     </div>
   );
 }
