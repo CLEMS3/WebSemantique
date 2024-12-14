@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import {useState, useEffect} from 'react';
-import { fetchCatFact } from '../../../Services/apiService';
+import { fetchAWarData } from '../../../Services/apiService';
 
 export default function CommanderRoot() {
       const params = useParams();
@@ -11,14 +11,14 @@ export default function CommanderRoot() {
       if (!name) {
         return <p>Loading...</p>;
       }
-    const [catFact, setCatFact] = useState<string | null>(null);
+    const [sparqlResult, setSparqlResult] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
-        const getCatFact = async () => {
+        const getSparqlResult = async () => {
             try {
-                const data = await fetchCatFact();
-                setCatFact(data.fact);
+                const data = await fetchAWarData();
+                setSparqlResult(data?.stringify);
             } catch (err) {
                 setError("Failed to load cat fact");
                 console.error(err);
@@ -27,14 +27,13 @@ export default function CommanderRoot() {
             }
         };
 
-        getCatFact();
+        getSparqlResult();
     }, []);
 
     return (
         <div className="h-full">
-            <h1>War Page</h1>
-            <p>War Name: {name}</p>
-            <p>Here is a little cat fact, because war is bad, cats are good : {catFact}</p>
+            <h1>War Page : {name}</h1>
+            <p>War Name: {sparqlResult}</p>
         </div>
     );
 }
