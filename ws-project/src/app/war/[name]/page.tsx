@@ -8,6 +8,7 @@ export default function CommanderRoot() {
       const params = useParams();
       const name = params.name; // Access the dynamic "name" parameter
 
+
       if (!name) {
         return <p>Loading...</p>;
       }
@@ -18,7 +19,8 @@ export default function CommanderRoot() {
         const getSparqlResult = async () => {
             try {
                 const data = await fetchAWarData();
-                setSparqlResult(data?.stringify);
+                console.log(data);
+                setSparqlResult(JSON.stringify(data));
             } catch (err) {
                 setError("Failed to load cat fact");
                 console.error(err);
