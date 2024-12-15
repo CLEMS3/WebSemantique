@@ -24,15 +24,8 @@ export const SearchArea = () => {
   
     return (
       <div style={{ border: '1px solid #ddd', padding: '1rem', borderRadius: '8px', maxWidth: '600px', margin: '0 auto' }}>
-        <h2>Search and Filter</h2>
-        <SearchBar query={query} onSearchChange={handleSearchChange} />
         <FilterArea filters={filters} onFilterChange={handleFilterChange} />
-        <div style={{ marginTop: '1rem' }}>
-          <strong>Search Query:</strong> {query}
-          <br />
-          <strong>Filters:</strong> {JSON.stringify(filters)}
-        </div>
-        <button onClick={() => console.log(`Search clicked with filters ${JSON.stringify(filters)} and query ${query}`)}>Search</button>
+        <SearchBar query={query} onSearchChange={handleSearchChange} />
       </div>
     );
   };
