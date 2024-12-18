@@ -1,13 +1,19 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 
-interface SearchBarProps {
-  onSearch: (query: string) => void;
-  suggestions: string[];
+interface Suggestion {
+  name: string;
+  image: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [] }) => {
-  const [query, setQuery] = React.useState("");
+interface SearchBarProps {
+  onSearch: (query: string) => void;
+  suggestions: { [key: string]: Suggestion[] };
+  query: string;
+  setQuery: (query: string) => void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [], query, setQuery }) => {
   const [showSuggestions, setShowSuggestions] = React.useState(false);
 
   const handleSearch = () => {
@@ -23,9 +29,15 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [] }) => 
     }
   };
 
-  const filteredSuggestions = suggestions.filter((suggestion) =>
-    suggestion.toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredSuggestions = Object.entries(suggestions).reduce((acc, [category, items]) => {
+    const filteredItems = items.filter((item) =>
+      item.name.toLowerCase().includes(query.toLowerCase())
+    );
+    if (filteredItems.length > 0) {
+      acc[category] = filteredItems;
+    }
+    return acc;
+  }, {} as { [key: string]: Suggestion[] });
 
   return (
     <div
@@ -39,7 +51,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [] }) => 
         margin: "20px auto",
       }}
     >
-      <div style={{ display: "flex", width: "100%"}}>
+      <div style={{ display: "flex", width: "100%" }}>
         <input
           type="text"
           style={{
@@ -75,7 +87,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [] }) => 
           <FaSearch />
         </button>
       </div>
-      {showSuggestions && query && filteredSuggestions.length > 0 && (
+      {showSuggestions && query && Object.keys(filteredSuggestions).length > 0 && (
         <div
           style={{
             position: "absolute",
@@ -93,31 +105,33 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [] }) => 
             zIndex: 10,
           }}
         >
-          {Object.entries(filteredSuggestions.reduce((acc, suggestion) => {
-            const category = suggestion.split(' ')[0]; // Assuming category is the first word
-            if (!acc[category]) acc[category] = [];
-            acc[category].push(suggestion);
-            return acc;
-          }, {} as Record<string, string[]>)).map(([category, suggestions]) => (
+          {Object.entries(filteredSuggestions).map(([category, items]) => (
             <div key={category} style={{ marginBottom: "10px" }}>
-              <h4 style={{ margin: "5px 0" }}>{category}</h4>
+              <h4 style={{ margin: "5px 0" }}>• {category}</h4>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-            {suggestions.map((suggestion, index) => (
-              <li
-            key={index}
-            style={{
-              padding: "10px",
-              cursor: "pointer",
-              borderBottom: "1px solid #f0f0f0",
-            }}
-            onClick={() => {
-              setQuery(suggestion);
-              setShowSuggestions(false);
-            }}
-              >
-            {suggestion}
-              </li>
-            ))}
+                {items.map((item, index) => (
+                  <li
+                    key={index}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "10px",
+                      cursor: "pointer",
+                      borderBottom: "1px solid #f0f0f0",
+                    }}
+                    onClick={() => {
+                      setQuery(item.name);
+                      setShowSuggestions(false);
+                    }}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      style={{ width: "30px", height: "30px", marginRight: "10px"}}
+                    />
+                    {item.name}
+                  </li>
+                ))}
               </ul>
             </div>
           ))}
