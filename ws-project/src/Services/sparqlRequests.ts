@@ -7,6 +7,25 @@ export function getRequestUrl(request: string) {
   );
 }
 
+export const WAR_RESEARCH = (search: string) => ({
+  warResearch: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?label ?image
+WHERE {
+  ?war a dbo:MilitaryConflict ;
+       rdfs:label ?label ;
+       dbo:thumbnail ?image . # Récupère l'URL de l'image
+  FILTER (LANG(?label) = "fr")
+  FILTER (CONTAINS(LCASE(?label), LCASE("${search}")))
+}
+ORDER BY ?label
+LIMIT 3
+`,
+});
+
 export const sparqlRequestConstants = {
   guerreCivileDeCesar: `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                         SELECT ?label

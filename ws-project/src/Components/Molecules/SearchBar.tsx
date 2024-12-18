@@ -2,7 +2,7 @@ import React from "react";
 import { FaSearch } from "react-icons/fa";
 
 interface Suggestion {
-  name: string;
+  label: string;
   image: string;
 }
 
@@ -31,7 +31,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [], query
 
   const filteredSuggestions = Object.entries(suggestions).reduce((acc, [category, items]) => {
     const filteredItems = items.filter((item) =>
-      item.name.toLowerCase().includes(query.toLowerCase())
+      item.label.toLowerCase().includes(query.toLowerCase())
     );
     if (filteredItems.length > 0) {
       acc[category] = filteredItems;
@@ -120,16 +120,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [], query
                       borderBottom: "1px solid #f0f0f0",
                     }}
                     onClick={() => {
-                      setQuery(item.name);
+                      setQuery(item.label);
                       setShowSuggestions(false);
                     }}
                   >
                     <img
                       src={item.image}
-                      alt={item.name}
+                      alt={item.label}
                       style={{ width: "30px", height: "30px", marginRight: "10px"}}
                     />
-                    {item.name}
+                    {item.label}
                   </li>
                 ))}
               </ul>

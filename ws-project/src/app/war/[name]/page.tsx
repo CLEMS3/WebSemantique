@@ -3,7 +3,6 @@
 import { useParams } from 'next/navigation';
 import {useState, useEffect} from 'react';
 import { fetchAWarData } from '../../../Services/apiService';
-import { fetchCatFact } from '../../../Services/apiService';
 import {WarPage} from '../../../Components/Templates/WarPage';
 import NavBar from "@/Components/Templates/NavBar";
 

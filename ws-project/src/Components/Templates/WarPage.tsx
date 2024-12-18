@@ -27,13 +27,21 @@ const warData: DataPageProps = {
 };
 
 export const WarPage: React.FC = () => {
+    const [dataPage, setDataPage] = React.useState<DataPageProps | null>(null);
+
+    React.useEffect(() => {
+        setDataPage(warData);
+    }, []);
+    if (!dataPage) {
+        return null;
+    }
     return (
         <DataPage 
-            title={warData.title}
-            text={warData.text}
-            imageUrl={warData.imageUrl}
-            list1={warData.list1}
-            list2={warData.list2}
+            title={dataPage.title}
+            text={dataPage.text}
+            imageUrl={dataPage.imageUrl}
+            list1={dataPage.list1}
+            list2={dataPage.list2}
         />
     );
 };
