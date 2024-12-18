@@ -6,8 +6,7 @@ import HomeTitle from '../Molecules/HomeTitle';
 
 const HomePage: React.FC = () => {
     return (
-        <div>
-            <HomeTitle />
+        <div className='h-full w-full flex flex-col items-center justify-center'>
             <SearchArea />
         </div>
     );
