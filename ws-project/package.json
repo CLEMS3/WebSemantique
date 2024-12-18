@@ -13,7 +13,9 @@
     "next": "15.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.0.2"
+    "react-icons": "^5.4.0",
+    "react-router-dom": "^7.0.2",
+    "react-search-input": "^0.11.3"
   },
   "devDependencies": {
     "@types/node": "^20",
