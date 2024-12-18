@@ -15,33 +15,28 @@ const FilterArea: React.FC<FilterAreaProps> = ({ filters, onFilterChange }) => {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label>
-                Category:
-                <select
-                    name="category"
-                    value={filters.category || ''}
-                    onChange={handleInputChange}
-                    style={{ marginLeft: '0.5rem' }}
-                >
-                    <option value="">All</option>
-                    <option value="books">Books</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="fashion">Fashion</option>
-                </select>
-            </label>
-            <label>
-                Price Range:
-                <input
-                    type="text"
-                    name="price"
-                    value={filters.price || ''}
-                    onChange={handleInputChange}
-                    placeholder="e.g., 10-50"
-                    style={{ marginLeft: '0.5rem' }}
-                />
-            </label>
-        </div>
+        <fieldset className="flex items-start">
+            <div className='pl-10'>
+                <input type="checkbox" id="conflits" name="filter" defaultChecked />
+                <label>conflits</label>
+            </div>
+
+            <div className='pl-10'>
+                <input type="checkbox" id="personnalitée" name="filter"/>
+                <label>personnalitée</label>
+            </div>
+
+            <div className='pl-10'>
+                <input type="checkbox" id="forces armées" name="filter"/>
+                <label>forces armées</label>
+            </div>
+
+            <div className='pl-10'>
+                <input type="checkbox" id="pays" name="filter" />
+                <label>pays</label>
+            </div>
+        </fieldset>
+
     );
 };
 

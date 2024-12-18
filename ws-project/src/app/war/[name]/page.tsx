@@ -3,6 +3,9 @@
 import { useParams } from 'next/navigation';
 import {useState, useEffect} from 'react';
 import { fetchAWarData } from '../../../Services/apiService';
+import { fetchCatFact } from '../../../Services/apiService';
+import {WarPage} from '../../../Components/Templates/WarPage';
+import NavBar from "@/Components/Templates/NavBar";
 
 export default function CommanderRoot() {
       const params = useParams();
@@ -33,9 +36,11 @@ export default function CommanderRoot() {
     }, []);
 
     return (
-        <div className="h-full">
-            <h1>War Page : {name}</h1>
-            <p>War Name: {sparqlResult}</p>
+        <div className="h-screen overflow-hidden bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/La_Libert%C3%A9_guidant_le_peuple_-_Eug%C3%A8ne_Delacroix_-_Mus%C3%A9e_du_Louvre_Peintures_RF_129_-_apr%C3%A8s_restauration_2024.jpg/1024px-La_Libert%C3%A9_guidant_le_peuple_-_Eug%C3%A8ne_Delacroix_-_Mus%C3%A9e_du_Louvre_Peintures_RF_129_-_apr%C3%A8s_restauration_2024.jpg')]">
+            <NavBar/>
+            <div className="p-12 pb-20 h-full">
+                <WarPage/>
+            </div>
         </div>
     );
 }
