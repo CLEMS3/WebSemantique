@@ -16,17 +16,17 @@ export const SearchArea = () => {
 
   const [suggestions, setSuggestions] = useState<{ [key: string]: Suggestion[] }>({});
 
-  const [searchConflict, setSearchConflict] = useState<boolean>(false);
-  const [searchPersonalities, setSearchPersonalities] = useState<boolean>(false);
-  const [searchArmedForces, setSearchArmedForces] = useState<boolean>(false);
-  const [searchCountries, setSearchCountries] = useState<boolean>(false);
+  const [searchConflict, setSearchConflict] = useState<boolean>(true);
+  const [searchPersonalities, setSearchPersonalities] = useState<boolean>(true);
+  const [searchWar, setSearchWar] = useState<boolean>(true);
+  const [searchCountries, setSearchCountries] = useState<boolean>(true);
 
   const [query, setQuery] = React.useState("");
 
   useEffect(() => {
     const search = async () => {
       const data = await fetchSearchWar(query);
-      setSuggestions( {
+      setSuggestions({
         "Guerre": data,
         "Commandants": [
           { label: "Jules César", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg/1024px-Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg" },
@@ -45,29 +45,29 @@ export const SearchArea = () => {
     search();
 
   }, [query]);
- 
+
   return (
     <div
-  className="flex flex-col items-center justify-center"
-  style={{
-    position: "relative",
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    width: "80vw",
-    height: "80vh",
-    borderRadius: "30px",
-  }}
->
-<div className="flex space-x-4 mb-4">
-  <Checkbox name="conflicts" checked={searchConflict} setChecked={setSearchConflict} label='Conflits' />
-  <Checkbox name="personalities" checked={searchPersonalities} setChecked={setSearchPersonalities} label='Personnalités' />
-  <Checkbox name="armedForces" checked={searchArmedForces} setChecked={setSearchArmedForces} label='Forces armées' />
-  <Checkbox name="countries" checked={searchCountries} setChecked={setSearchCountries} label='Pays' />
-</div>
+      className="flex flex-col items-center justify-start"
+      style={{
+        position: "relative",
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
+        width: "80vw",
+        height: "80vh",
+        borderRadius: "30px",
+      }}
+    >
+      <div className="flex space-x-4 mb-4 mt-10">
+        <Checkbox name="conflicts" checked={searchConflict} setChecked={setSearchConflict} label='Bataille' />
+        <Checkbox name="personalities" checked={searchPersonalities} setChecked={setSearchPersonalities} label='Personnalités' />
+        <Checkbox name="armedForces" checked={searchWar} setChecked={setSearchWar} label='Guerre' />
+        <Checkbox name="countries" checked={searchCountries} setChecked={setSearchCountries} label='Pays' />
+      </div>
 
- <SearchBar onSearch={(query: string) => console.log(query)} suggestions={suggestions} query={query} setQuery={setQuery}/>
-    
+      <SearchBar onSearch={(query: string) => console.log(query)} suggestions={suggestions} query={query} setQuery={setQuery} />
 
-</div>
+
+    </div>
 
   );
 

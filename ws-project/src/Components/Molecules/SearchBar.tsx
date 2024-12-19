@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 
@@ -97,7 +99,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [], query
             backgroundColor: "white",
             border: "1px solid #ccc",
             borderRadius: "0 0 4px 4px",
-            maxHeight: "200px",
+            maxHeight: "290px",
             width: "90%",
             overflowY: "auto",
             margin: 0,

@@ -8,7 +8,7 @@ export function getRequestUrl(request: string) {
 }
 
 export const WAR_RESEARCH = (search: string) => ({
-  warResearch: `PREFIX dbo: <http://dbpedia.org/ontology/>
+  /*warResearch: `PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX dbp: <http://dbpedia.org/property/>
 PREFIX dbr: <http://dbpedia.org/resource/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -22,6 +22,23 @@ WHERE {
   FILTER (CONTAINS(LCASE(?label), LCASE("${search}")))
 }
 ORDER BY ?label
+LIMIT 3
+`,*/
+warResearch: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?label ?image
+WHERE {
+  ?battle a dbo:MilitaryConflict ;
+		  rdfs:label ?label ;
+
+       dbo:thumbnail ?image ; # Récupère l'URL de l'image
+		  dbo:abstract ?description.
+  FILTER (LANG(?label) = "fr" && LANG(?description) = "fr" && CONTAINS(LCASE(?label),LCASE("${search}")))
+FILTER NOT EXISTS {?otherpage a dbo:MilitaryConflict; dbo:isPartOfMilitaryConflict ?battle.}
+}
+GROUP BY ?battle
 LIMIT 3
 `,
 });
