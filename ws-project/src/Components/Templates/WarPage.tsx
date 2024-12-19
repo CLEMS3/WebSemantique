@@ -6,8 +6,8 @@ interface DataPageProps {
     title: string;
     text: string;
     imageUrl: string;
-    list1: { [key: string]: string[] };
-    list2: { [key: string]: string[] };
+    list1: { [key: string]: { label: string; appLink: string }[] }; 
+    list2: { [key: string]: { label: string; appLink: string }[] }; 
 }
 
 // const warData: DataPageProps = {

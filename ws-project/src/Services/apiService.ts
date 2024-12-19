@@ -11,8 +11,8 @@ interface WarData {
   title: string;
   text: string;
   imageUrl: string;
-  list1: { [key: string]: string[] };
-  list2: { [key: string]: string[] };
+  list1: { [key: string]: { label: string; appLink: string }[] }; 
+  list2: { [key: string]: { label: string; appLink: string }[] }; 
 }
 
 // fetch a sparql result
@@ -72,6 +72,17 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
       throw new Error("No data found");
     }
 
+    const processListToStrings = (data: any, category: string) => {
+      return data.map((item: any) => {
+        // Récupère la dernière partie de l'URL (ex. Decimus_Junius_Brutus_Albinus)
+        const label = item.split('/').pop()?.replace(/_/g, ' ') || ''; // Remplace les underscores par des espaces pour le label
+        const encodedLabel = encodeURIComponent(label); // Encode l'URL pour gérer les espaces et autres caractères spéciaux
+    
+        const appLink = `http://localhost:3000/${category}/${encodedLabel}`;  // Crée l'URL locale avec le label encodé
+        return { label, appLink };
+      });
+    };
+
     // Transformation des données
     const warData: WarData = {
       title: result.label?.value || "Titre inconnu",
@@ -79,26 +90,23 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
       imageUrl: result.image?.value || "",
       list1: {
         "Guerre": result.isPartOfMilitaryConflict
-          ? [result.isPartOfMilitaryConflict.value]
-          : ["Non spécifiée"],
+          ? processListToStrings([result.isPartOfMilitaryConflict.value], "war")
+          : [{ label: "Non spécifiée", appLink: "" }],
         "Commandants": result.commander
-          ? [result.commander.value]
-          : ["Non spécifiés"],
+          ? processListToStrings([result.commander.value], "commander")
+          : [{ label: "Non spécifiés", appLink: "" }],
       },
       list2: {
         "Date": result.date ? [result.date.value] : ["Date inconnue"],
         "Lieux": result.place
-          ? [result.place.value]
-          : ["Non spécifiés"],
-        "Victimes": result.casualties
-          ? [result.casualties.value]
-          : ["Non spécifiées"],
+          ? processListToStrings([result.place.value], "country")
+          : [{ label: "Non spécifiés", appLink: "" }],
+        "Victimes": result.casualties ? [result.casualties.value] : ["Non spécifiées"],
         "Issue": result.result ? [result.result.value] : ["Non spécifiée"],
-        "Forces en présence": result.strength
-          ? [result.strength.value]
-          : ["Non spécifiées"],
+        "Forces en présence": result.strength ? [result.strength.value] : ["Non spécifiées"],
       },
     };
+    
     console.log(warData);
     return warData;
   } catch (error) {
@@ -106,5 +114,3 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
     throw new Error("Failed to fetch conflict data");
   }
 }
-
-
