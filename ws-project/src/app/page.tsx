@@ -1,3 +1,4 @@
+"use client";
 
 import HomePage from "@/Components/Templates/HomePage";
 import NavBar from "@/Components/Templates/NavBar";
