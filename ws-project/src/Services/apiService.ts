@@ -1,29 +1,28 @@
-import axios from 'axios';
-import { CATFACT } from './urls';
+import axios from "axios";
+import { sparqlRequestConstants } from "./sparqlRequests";
+import { getRequestUrl } from "./sparqlRequests";
 
-// Define the type for the response data
-interface CatFactResponse {
-  fact: string;
-  length: number;
-}
-
-// Create a service to fetch a cat fact
-export async function fetchCatFact(): Promise<CatFactResponse> {
+// fetch a sparql result
+export async function fetchSparql(request: string): Promise<JSON> {
   try {
-    const response = await axios.get<CatFactResponse>(CATFACT.catfact);
+    const response = await axios.get<JSON>(request);
     return response.data;
   } catch (error) {
-    console.error('Error fetching cat fact:', error);
-    throw new Error('Failed to fetch cat fact');
+    console.error("Error fetching data", error);
+    throw new Error("Failed to fetch data");
   }
 }
 
-// Example usage
-(async () => {
+// fetch a wars data
+export async function fetchAWarData(): Promise<JSON> {
   try {
-    const catFact = await fetchCatFact();
-    console.log('Cat Fact:', catFact.fact);
+    const response = await fetchSparql(
+      getRequestUrl(sparqlRequestConstants.guerreCivileDeCesar)
+    );
+    const result = response.results.bindings[0].label.value;
+    return result;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching conflict data", error);
+    throw new Error("Failed to fetch conflict data");
   }
-})();
+}
