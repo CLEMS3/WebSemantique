@@ -7,7 +7,7 @@ import { fetchCatFact } from '../../../Services/apiService';
 import {WarPage} from '../../../Components/Templates/WarPage';
 import NavBar from "@/Components/Templates/NavBar";
 
-export default function CommanderRoot() {
+export default function WarRoot() {
       const params = useParams();
       const name = params.name; // Access the dynamic "name" parameter
 
