@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PLACE_RESEARCH } from "./sparqlRequests";
+import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PERSONALITY_RESEARCH, PLACE_RESEARCH } from "./sparqlRequests";
 import { getRequestUrl } from "./sparqlRequests";
 import {getLastPartOfUrl} from "./utils";
 import { get } from "http";
@@ -136,6 +136,26 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
     
     console.log(warData);
     return warData;
+  } catch (error) {
+    console.error("Error fetching conflict data", error);
+    throw new Error("Failed to fetch conflict data");
+  }
+}
+
+export async function fetchSearchPersonality(request: string): Promise<Suggestion[]> {
+  try {
+    console.log(getRequestUrl(PERSONALITY_RESEARCH(request).personalityResearch));
+    const response = await fetchSparql(
+      getRequestUrl(PERSONALITY_RESEARCH(request).personalityResearch)
+    );
+    
+    // Transforme les résultats en une liste d'objets Suggestion
+    const suggestions: Suggestion[] = response.results.bindings.map((binding: any) => ({
+      label: binding.label.value, // Accès au champ label
+      image: binding.image.value, // Accès au champ image
+    }));
+    
+    return suggestions;
   } catch (error) {
     console.error("Error fetching conflict data", error);
     throw new Error("Failed to fetch conflict data");

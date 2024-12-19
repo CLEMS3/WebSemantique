@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import SearchBar from '../Molecules/SearchBar';
 import { Checkbox } from '../Atoms/Checkbox';
-import { fetchSearchWar, fetchSearchPlace } from '@/Services/apiService';
+
+import { fetchSearchWar, fetchSearchPlace, fetchSearchPersonality } from '@/Services/apiService';
 
 interface Suggestion {
   label: string;
@@ -11,38 +12,44 @@ interface Suggestion {
   url: string;
 }
 
-
-
 export const SearchArea = () => {
-
   const [suggestions, setSuggestions] = useState<{ [key: string]: Suggestion[] }>({});
 
   const [searchConflict, setSearchConflict] = useState<boolean>(true);
   const [searchPersonalities, setSearchPersonalities] = useState<boolean>(true);
-  const [searchWar, setSearchWar] = useState<boolean>(true);
   const [searchCountries, setSearchCountries] = useState<boolean>(true);
 
   const [query, setQuery] = React.useState("");
 
   useEffect(() => {
     const search = async () => {
-      const dataBataille = await fetchSearchWar(query);
-      const dataPlace = await fetchSearchPlace(query);
-      setSuggestions({
-        "Guerre": dataBataille,
-        "Commandants": [
-          { label: "Jules César", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg/1024px-Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg", url: "https://fr.wikipedia.org/wiki/Jules_C%C3%A9sar" },
-          { label: "Vercingétorix", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Vercing%C3%A9torix_stat%C3%A8re_Gallica_avers.jpg/1280px-Vercing%C3%A9torix_stat%C3%A8re_Gallica_avers.jpg", url: "https://fr.wikipedia.org/wiki/Vercing%C3%A9torix" }
-        ],
-        "Pays": dataPlace
-      });
-      console.log(suggestions);
-      console.log(dataPlace);
-      console.log(dataBataille);
-    };
-    search();
+      const newSuggestions: { [key: string]: Suggestion[] } = {};
 
-  }, [query]);
+      // Effectuer les requêtes conditionnellement en fonction des cases cochées
+      if (searchConflict) {
+        const warData = await fetchSearchWar(query);
+        newSuggestions["Guerre"] = warData;
+      }
+
+      if (searchPersonalities) {
+        const personalityData = await fetchSearchPersonality(query);
+        newSuggestions["Commandants"] = personalityData;
+      }
+
+      if (searchCountries) {
+       const dataPlace = await fetchSearchPlace(query);
+        newSuggestions["Pays"] = dataPlace;
+      }
+
+      setSuggestions(newSuggestions);
+      console.log(newSuggestions);
+    };
+
+    // Exécuter `search` uniquement si une case est cochée
+    if (query) {
+      search();
+    }
+  }, [query, searchConflict, searchPersonalities, searchCountries]);
 
   return (
     <div
@@ -56,20 +63,14 @@ export const SearchArea = () => {
       }}
     >
       <div className="flex space-x-4 mb-4 mt-10">
-        <Checkbox name="conflicts" checked={searchConflict} setChecked={setSearchConflict} label='Bataille' />
+        <Checkbox name="conflicts" checked={searchConflict} setChecked={setSearchConflict} label='Conflit' />
         <Checkbox name="personalities" checked={searchPersonalities} setChecked={setSearchPersonalities} label='Personnalités' />
-        <Checkbox name="armedForces" checked={searchWar} setChecked={setSearchWar} label='Guerre' />
         <Checkbox name="countries" checked={searchCountries} setChecked={setSearchCountries} label='Pays' />
       </div>
 
       <SearchBar onSearch={(query: string) => console.log(query)} suggestions={suggestions} query={query} setQuery={setQuery} />
-
-
     </div>
-
   );
-
-
 };
 
 export default SearchArea;
