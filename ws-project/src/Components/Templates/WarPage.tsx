@@ -36,7 +36,7 @@ interface WarPageProps {
 
 export const WarPage: React.FC<WarPageProps> = ({nameParam}) => {
     const [dataPage, setDataPage] = React.useState<DataPageProps | null>(null);
-    const name = decodeURIComponent(nameParam);
+    const name = "http://dbpedia.org/resource/" + nameParam;
     
 
     React.useEffect(() => {
@@ -50,7 +50,7 @@ export const WarPage: React.FC<WarPageProps> = ({nameParam}) => {
     }
     return (
         <DataPage 
-            title={name}
+            title={dataPage.title}
             text={dataPage.text}
             imageUrl={dataPage.imageUrl}
             list1={dataPage.list1}

@@ -12,7 +12,7 @@ export const WAR_RESEARCH = (search: string) => ({
 PREFIX dbp: <http://dbpedia.org/property/>
 PREFIX dbr: <http://dbpedia.org/resource/>
 
-SELECT DISTINCT ?label ?image
+SELECT DISTINCT ?battle ?label ?image
 WHERE {
   ?battle a dbo:MilitaryConflict ;
 		  rdfs:label ?label ;
@@ -27,35 +27,66 @@ LIMIT 3
 `,
 });
 
+export const PLACE_RESEARCH = (search: string) => ({
+  placeResearch: `SELECT DISTINCT ?place ?label  ?image
+  WHERE {
+    ?place a dbo:Place ;
+           rdfs:label ?label ;
+           dbo:abstract ?abstract ;
+  dbo:thumbnail ?image.
+  
+    
+    FILTER (LANG(?label) = "fr")
+    FILTER (LANG(?abstract) = "fr")
+    FILTER (CONTAINS(LCASE(?label), "${search}"))
+  }
+  LIMIT 3`,
+});
+  
+
 export const DISPLAY_WAR = (search: string) => ({
   warDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT DISTINCT ?label ?image ?abstract ?date ?place ?casualties ?result ?strength ?isPartOfMilitaryConflict ?commander
+SELECT DISTINCT ?label ?abstract ?image ?date ?place ?casualties ?result ?strength ?isPartOfMilitaryConflict ?commander
 WHERE {
-  ?war a dbo:MilitaryConflict ;
-       rdfs:label ?label ;
-       dbo:abstract ?abstract .
+  <${search}> rdfs:label ?label ;
+                                              dbo:abstract ?abstract .
   
-  OPTIONAL { ?war dbo:thumbnail ?image . }
-  OPTIONAL { ?war dbo:date ?date . }
-  OPTIONAL { ?war dbo:place ?place . }
-  OPTIONAL { ?war dbo:casualties ?casualties . }
-  OPTIONAL { ?war dbo:result ?result . }
-  OPTIONAL { ?war dbo:strength ?strength . }
-  OPTIONAL { ?war dbo:isPartOfMilitaryConflict ?isPartOfMilitaryConflict . }
-  OPTIONAL { ?war dbo:commander ?commander . }
+  OPTIONAL { <${search}> dbo:thumbnail ?image . }
+  OPTIONAL { <${search}> dbo:date ?date . }
+  OPTIONAL { <${search}> dbo:place ?place . }
+  OPTIONAL { <${search}> dbo:casualties ?casualties . }
+  OPTIONAL { <${search}> dbo:result ?result . }
+  OPTIONAL { <${search}> dbo:strength ?strength . }
+  OPTIONAL { <${search}> dbo:isPartOfMilitaryConflict ?isPartOfMilitaryConflict . }
+  OPTIONAL { <${search}> dbo:commander ?commander . }
 
   FILTER (LANG(?label) = "fr")
-FILTER (LANG(?abstract) = "fr")
-
-
-  FILTER (CONTAINS(LCASE(?label), LCASE("${search}")))
+  FILTER (LANG(?abstract) = "fr")
 }
-ORDER BY ?label
 LIMIT 1
 
+
+
 `,
+});
+
+
+export const DISPLAY_PLACE = (search: string) => ({
+  placeDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?label ?abstract ?thumbnail
+WHERE {
+  <${search}> rdfs:label ?label ;
+                                        dbo:abstract ?abstract .
+  OPTIONAL { <${search}> dbo:thumbnail ?thumbnail . }
+  FILTER (LANG(?label) = "fr")
+  FILTER (LANG(?abstract) = "fr")
+}
+`
+
 });
 
 export const PERSONALITY_RESEARCH = (search: string) => ({

@@ -2,10 +2,13 @@
 
 import React from "react";
 import { FaSearch } from "react-icons/fa";
+import {getLastPartOfUrl} from "@/Services/utils";
+import { get } from "https";
 
 interface Suggestion {
   label: string;
   image: string;
+  url: string;
 }
 
 interface SearchBarProps {
@@ -123,11 +126,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [], query
                 }}
                 onClick={() => {
                   if (category === "Guerre") {
-                    window.location.href = `/war/${encodeURIComponent(item.label)}`;
+                    window.location.href = `/war/${getLastPartOfUrl(item.url)}`;
                   } else if (category === "Commandants") {
-                    window.location.href = `/commander/${encodeURIComponent(item.label)}`;
+                    window.location.href = `/commander/${getLastPartOfUrl(item.url)}`;
                   } else if (category === "Pays") {
-                    window.location.href = `/country/${encodeURIComponent(item.label)}`;
+                    window.location.href = `/country/${getLastPartOfUrl(item.url)}`;
                   }
                   
                 }}

@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import SearchBar from '../Molecules/SearchBar';
 import { Checkbox } from '../Atoms/Checkbox';
-import { fetchSearchWar, fetchSearchPersonality } from '@/Services/apiService';
+
+import { fetchSearchWar, fetchSearchPlace, fetchSearchPersonality } from '@/Services/apiService';
 
 interface Suggestion {
   label: string;
-  image: string;
+  image: string
+  url: string;
 }
 
 export const SearchArea = () => {
@@ -35,12 +37,8 @@ export const SearchArea = () => {
       }
 
       if (searchCountries) {
-        newSuggestions["Pays"] = [
-          { label: "France", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Armoiries_r%C3%A9publique_fran%C3%A7aise.svg/132px-Armoiries_r%C3%A9publique_fran%C3%A7aise.svg.png" },
-          { label: "Allemagne", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Coat_of_arms_of_Germany.svg/132px-Coat_of_arms_of_Germany.svg.png" },
-          { label: "Italie", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Emblem_of_Italy.svg/132px-Emblem_of_Italy.svg.png" },
-          { label: "Espagne", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Escudo_de_Espa%C3%B1a_%28mazonado%29.svg/132px-Escudo_de_Espa%C3%B1a_%28mazonado%29.svg.png" }
-        ];
+       const dataPlace = await fetchSearchPlace(query);
+        newSuggestions["Pays"] = dataPlace;
       }
 
       setSuggestions(newSuggestions);
