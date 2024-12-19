@@ -1,8 +1,10 @@
+"use client";
+
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 
 interface Suggestion {
-  name: string;
+  label: string;
   image: string;
 }
 
@@ -31,7 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [], query
 
   const filteredSuggestions = Object.entries(suggestions).reduce((acc, [category, items]) => {
     const filteredItems = items.filter((item) =>
-      item.name.toLowerCase().includes(query.toLowerCase())
+      item.label.toLowerCase().includes(query.toLowerCase())
     );
     if (filteredItems.length > 0) {
       acc[category] = filteredItems;
@@ -97,7 +99,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [], query
             backgroundColor: "white",
             border: "1px solid #ccc",
             borderRadius: "0 0 4px 4px",
-            maxHeight: "200px",
+            maxHeight: "290px",
             width: "90%",
             overflowY: "auto",
             margin: 0,
@@ -109,29 +111,35 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [], query
             <div key={category} style={{ marginBottom: "10px" }}>
               <h4 style={{ margin: "5px 0" }}>• {category}</h4>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                {items.map((item, index) => (
-                  <li
-                    key={index}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      padding: "10px",
-                      cursor: "pointer",
-                      borderBottom: "1px solid #f0f0f0",
-                    }}
-                    onClick={() => {
-                      setQuery(item.name);
-                      setShowSuggestions(false);
-                    }}
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      style={{ width: "30px", height: "30px", marginRight: "10px"}}
-                    />
-                    {item.name}
-                  </li>
-                ))}
+              {items.map((item, index) => (
+                <li
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "10px",
+                  cursor: "pointer",
+                  borderBottom: "1px solid #f0f0f0",
+                }}
+                onClick={() => {
+                  if (category === "Guerre") {
+                    window.location.href = `/war/${encodeURIComponent(item.label)}`;
+                  } else if (category === "Commandants") {
+                    window.location.href = `/commander/${encodeURIComponent(item.label)}`;
+                  } else if (category === "Pays") {
+                    window.location.href = `/country/${encodeURIComponent(item.label)}`;
+                  }
+                  
+                }}
+                >
+                <img
+                  src={item.image}
+                  alt={item.label}
+                  style={{ width: "30px", height: "30px", marginRight: "10px"}}
+                />
+                {item.label}
+                </li>
+              ))}
               </ul>
             </div>
           ))}
