@@ -1,10 +1,13 @@
 import axios from "axios";
-import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR } from "./sparqlRequests";
+import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PLACE_RESEARCH } from "./sparqlRequests";
 import { getRequestUrl } from "./sparqlRequests";
+import {getLastPartOfUrl} from "./utils";
+import { get } from "http";
 
 interface Suggestion {
   label: string;
   image: string;
+  url: string;
 }
 
 interface WarData {
@@ -46,17 +49,40 @@ export async function fetchSearchWar(request: string): Promise<Suggestion[]> {
     const response = await fetchSparql(
       getRequestUrl(WAR_RESEARCH(request).warResearch)
     );
+    console.log(response);
     
     // Transforme les résultats en une liste d'objets Suggestion
     const suggestions: Suggestion[] = response.results.bindings.map((binding: any) => ({
       label: binding.label.value, // Accès au champ label
       image: binding.image.value, // Accès au champ image
+      url: binding.battle.value, // Accès au champ url
     }));
     
     return suggestions;
   } catch (error) {
     console.error("Error fetching conflict data", error);
     throw new Error("Failed to fetch conflict data");
+  }
+}
+
+export async function fetchSearchPlace(request: string): Promise<Suggestion[]> {
+  try {
+    console.log(getRequestUrl(PLACE_RESEARCH(request).placeResearch));
+    const response = await fetchSparql(
+      getRequestUrl(PLACE_RESEARCH(request).placeResearch)
+    );
+    
+    // Transforme les résultats en une liste d'objets Suggestion
+    const suggestions: Suggestion[] = response.results.bindings.map((binding: any) => ({
+      label: binding.label.value, // Accès au champ label
+      image: binding.image.value, // Accès au champ image
+      url: binding.place.value, // Accès au champ url
+    }));
+    
+    return suggestions;
+  } catch (error) {
+    console.error("Error fetching place data", error);
+    throw new Error("Failed to fetch place data");
   }
 }
 
@@ -76,9 +102,10 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
       return data.map((item: any) => {
         // Récupère la dernière partie de l'URL (ex. Decimus_Junius_Brutus_Albinus)
         const label = item.split('/').pop()?.replace(/_/g, ' ') || ''; // Remplace les underscores par des espaces pour le label
-        const encodedLabel = encodeURIComponent(label); // Encode l'URL pour gérer les espaces et autres caractères spéciaux
+        //const encodedLabel = encodeURIComponent(label); // Encode l'URL pour gérer les espaces et autres caractères spéciaux
+        const uri = getLastPartOfUrl(item);
     
-        const appLink = `http://localhost:3000/${category}/${encodedLabel}`;  // Crée l'URL locale avec le label encodé
+        const appLink = `http://localhost:3000/${category}/${uri}`;  // Crée l'URL locale avec le label encodé
         return { label, appLink };
       });
     };
@@ -114,3 +141,4 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
     throw new Error("Failed to fetch conflict data");
   }
 }
+

@@ -3,11 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import SearchBar from '../Molecules/SearchBar';
 import { Checkbox } from '../Atoms/Checkbox';
-import { fetchSearchWar } from '@/Services/apiService';
+import { fetchSearchWar, fetchSearchPlace } from '@/Services/apiService';
 
 interface Suggestion {
   label: string;
-  image: string;
+  image: string
+  url: string;
 }
 
 
@@ -25,22 +26,19 @@ export const SearchArea = () => {
 
   useEffect(() => {
     const search = async () => {
-      const data = await fetchSearchWar(query);
+      const dataBataille = await fetchSearchWar(query);
+      const dataPlace = await fetchSearchPlace(query);
       setSuggestions({
-        "Guerre": data,
+        "Guerre": dataBataille,
         "Commandants": [
-          { label: "Jules César", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg/1024px-Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg" },
-          { label: "Vercingétorix", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Vercing%C3%A9torix_stat%C3%A8re_Gallica_avers.jpg/1280px-Vercing%C3%A9torix_stat%C3%A8re_Gallica_avers.jpg" }
+          { label: "Jules César", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg/1024px-Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg", url: "https://fr.wikipedia.org/wiki/Jules_C%C3%A9sar" },
+          { label: "Vercingétorix", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Vercing%C3%A9torix_stat%C3%A8re_Gallica_avers.jpg/1280px-Vercing%C3%A9torix_stat%C3%A8re_Gallica_avers.jpg", url: "https://fr.wikipedia.org/wiki/Vercing%C3%A9torix" }
         ],
-        "Pays": [
-          { label: "France", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Armoiries_r%C3%A9publique_fran%C3%A7aise.svg/132px-Armoiries_r%C3%A9publique_fran%C3%A7aise.svg.png" },
-          { label: "Allemagne", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Coat_of_arms_of_Germany.svg/132px-Coat_of_arms_of_Germany.svg.png" },
-          { label: "Italie", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Emblem_of_Italy.svg/132px-Emblem_of_Italy.svg.png" },
-          { label: "Espagne", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Escudo_de_Espa%C3%B1a_%28mazonado%29.svg/132px-Escudo_de_Espa%C3%B1a_%28mazonado%29.svg.png" }
-        ]
+        "Pays": dataPlace
       });
       console.log(suggestions);
-      console.log(data);
+      console.log(dataPlace);
+      console.log(dataBataille);
     };
     search();
 
