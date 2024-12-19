@@ -125,11 +125,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, suggestions = [], query
                   borderBottom: "1px solid #f0f0f0",
                 }}
                 onClick={() => {
-                  if (category === "Guerre") {
+                  if (category === "Conflit") {
                     window.location.href = `/war/${getLastPartOfUrl(item.url)}`;
-                  } else if (category === "Commandants") {
+                  } else if (category === "Personnalité") {
                     window.location.href = `/commander/${getLastPartOfUrl(item.url)}`;
-                  } else if (category === "Pays") {
+                  } else if (category === "Lieu") {
                     window.location.href = `/country/${getLastPartOfUrl(item.url)}`;
                   }
                   

@@ -28,17 +28,17 @@ export const SearchArea = () => {
       // Effectuer les requêtes conditionnellement en fonction des cases cochées
       if (searchConflict) {
         const warData = await fetchSearchWar(query);
-        newSuggestions["Guerre"] = warData;
+        newSuggestions["Conflit"] = warData;
       }
 
       if (searchPersonalities) {
         const personalityData = await fetchSearchPersonality(query);
-        newSuggestions["Commandants"] = personalityData;
+        newSuggestions["Personnalité"] = personalityData;
       }
 
       if (searchCountries) {
        const dataPlace = await fetchSearchPlace(query);
-        newSuggestions["Pays"] = dataPlace;
+        newSuggestions["Lieu"] = dataPlace;
       }
 
       setSuggestions(newSuggestions);
@@ -65,7 +65,7 @@ export const SearchArea = () => {
       <div className="flex space-x-4 mb-4 mt-10">
         <Checkbox name="conflicts" checked={searchConflict} setChecked={setSearchConflict} label='Conflit' />
         <Checkbox name="personalities" checked={searchPersonalities} setChecked={setSearchPersonalities} label='Personnalités' />
-        <Checkbox name="countries" checked={searchCountries} setChecked={setSearchCountries} label='Pays' />
+        <Checkbox name="countries" checked={searchCountries} setChecked={setSearchCountries} label='Lieux' />
       </div>
 
       <SearchBar onSearch={(query: string) => console.log(query)} suggestions={suggestions} query={query} setQuery={setQuery} />
