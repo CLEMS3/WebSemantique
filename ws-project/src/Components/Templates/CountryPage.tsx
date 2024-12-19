@@ -1,15 +1,21 @@
 import React from 'react';
 import DataPage from '../Organisms/DataPage';
+import { useEffect } from 'react';
+import { fetchDisplayPlace } from '@/Services/apiService';
 
 interface DataPageProps {
     title: string;
     text: string;
     imageUrl: string;
-    list1: { [key: string]: string[] };
-    list2: { [key: string]: string[] };
+    list1: { [key: string]: { label: string; appLink: string }[] }; 
+    list2: { [key: string]: { label: string; appLink: string }[] }; 
 }
 
-const countryData: DataPageProps = {
+interface CountryPageProps {
+    nameParam: string;
+}
+
+/*const countryData: DataPageProps = {
     title: "Siège d'Alésia",
     text: "Le siège d'Alésia est une bataille qui a eu lieu en 52 av. J.-C. entre les armées de Jules César et de Vercingétorix. Elle s'est déroulée autour de la ville d'Alésia, située dans l'actuel département de la Côte-d'Or, en France.",
     imageUrl: "https://upload.wikimedia.org/wikipedia/commons/9/93/Siege-alesia-vercingetorix-jules-cesar.jpg",
@@ -24,16 +30,31 @@ const countryData: DataPageProps = {
         "Issue": ["Victoire de Jules César"],
         "Forces en présence": ["80000 hommes pour César", "250000 pour Vercingétorix"]
     }
-};
+};*/
 
-export const CountryPage: React.FC = () => {
+export const CountryPage: React.FC<CountryPageProps> = ({nameParam}) => {
+    const [dataPage, setDataPage] = React.useState<DataPageProps | null>(null);
+    const name = "http://dbpedia.org/resource/" + nameParam;
+    console.log(nameParam);
+    console.log(name);
+    
+
+    useEffect(() => {
+        fetchDisplayPlace(name).then(data => {
+            setDataPage(data);
+            console.log(data);
+        });
+    }, []);
+    if (!dataPage) {
+        return null;
+    }
     return (
         <DataPage 
-            title={countryData.title}
-            text={countryData.text}
-            imageUrl={countryData.imageUrl}
-            list1={countryData.list1}
-            list2={countryData.list2}
+            title={dataPage.title}
+            text={dataPage.text}
+            imageUrl={dataPage.imageUrl}
+            list1={dataPage.list1}
+            list2={dataPage.list2}
         />
     );
 };

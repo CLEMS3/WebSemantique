@@ -1,6 +1,7 @@
 import React from 'react';
 import DataPage from '../Organisms/DataPage';
 import {fetchDisplayWar} from '@/Services/apiService';
+import { useEffect } from 'react';
 
 interface DataPageProps {
     title: string;
@@ -39,7 +40,7 @@ export const WarPage: React.FC<WarPageProps> = ({nameParam}) => {
     const name = "http://dbpedia.org/resource/" + nameParam;
     
 
-    React.useEffect(() => {
+    useEffect(() => {
         fetchDisplayWar(name).then(data => {
             setDataPage(data);
             console.log(data);

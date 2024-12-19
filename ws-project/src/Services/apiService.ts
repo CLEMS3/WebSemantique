@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PERSONALITY_RESEARCH, PLACE_RESEARCH } from "./sparqlRequests";
+import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PERSONALITY_RESEARCH, PLACE_RESEARCH, DISPLAY_PLACE } from "./sparqlRequests";
 import { getRequestUrl } from "./sparqlRequests";
 import {getLastPartOfUrl} from "./utils";
 import { get } from "http";
@@ -162,4 +162,52 @@ export async function fetchSearchPersonality(request: string): Promise<Suggestio
     throw new Error("Failed to fetch conflict data");
   }
 }
+
+export async function fetchDisplayPlace(request: string): Promise<WarData> {
+  try {
+    console.log(getRequestUrl(DISPLAY_PLACE(request).placeDisplay));
+    console.log(DISPLAY_PLACE(request).placeDisplay);
+    const response = await fetchSparql(
+      getRequestUrl(DISPLAY_PLACE(request).placeDisplay)
+    );
+    console.log(getRequestUrl(DISPLAY_WAR(request).warDisplay));
+
+    const result = response.results.bindings[0]; // Premier résultat
+    if (!result) {
+      throw new Error("No data found");
+    }
+
+    const processListToStrings = (data: any, category: string) => {
+      return data.map((item: any) => {
+        // Récupère la dernière partie de l'URL (ex. Decimus_Junius_Brutus_Albinus)
+        const label = item.split('/').pop()?.replace(/_/g, ' ') || ''; // Remplace les underscores par des espaces pour le label
+        //const encodedLabel = encodeURIComponent(label); // Encode l'URL pour gérer les espaces et autres caractères spéciaux
+        const uri = getLastPartOfUrl(item);
+    
+        const appLink = `http://localhost:3000/${category}/${uri}`;  // Crée l'URL locale avec le label encodé
+        return { label, appLink };
+      });
+    };
+
+    // Transformation des données
+    const placeData: WarData = {
+      title: result.label?.value || "Titre inconnu",
+      text: result.abstract?.value || "Aucune description disponible.",
+      imageUrl: result.thumbnail?.value || "",
+      list1: {},
+      list2: {},
+    };
+
+
+    console.log(placeData);
+    return placeData;
+  }
+
+  catch (error) {
+    console.error("Error fetching conflict data", error);
+    throw new Error("Failed to fetch conflict data");
+  }
+
+}
+      
 
