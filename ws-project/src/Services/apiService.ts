@@ -153,6 +153,7 @@ export async function fetchSearchPersonality(request: string): Promise<Suggestio
     const suggestions: Suggestion[] = response.results.bindings.map((binding: any) => ({
       label: binding.label.value, // Accès au champ label
       image: binding.image.value, // Accès au champ image
+      url: binding.commander.value, // Accès au champ url
     }));
     
     return suggestions;

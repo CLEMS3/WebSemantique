@@ -94,7 +94,7 @@ export const PERSONALITY_RESEARCH = (search: string) => ({
 PREFIX dbp: <http://dbpedia.org/property/>
 PREFIX dbr: <http://dbpedia.org/resource/>
 
-SELECT DISTINCT ?label ?image
+SELECT DISTINCT ?commander ?label ?image
 WHERE {
 ?conflict a dbo:MilitaryConflict;
 dbo:commander ?commander.
@@ -106,7 +106,7 @@ FILTER (LANG(?label) = "fr" && LANG(?description) = "fr" && CONTAINS(LCASE(?labe
 }
 LIMIT 3
 `,
-});
+}); 
 
 export const sparqlRequestConstants = {
   guerreCivileDeCesar: `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
