@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import SearchBar from '../Molecules/SearchBar';
 import { Checkbox } from '../Atoms/Checkbox';
-import { fetchSearchWar } from '@/Services/apiService';
+import { fetchSearchWar, fetchSearchPersonality } from '@/Services/apiService';
 
 interface Suggestion {
   label: string;
@@ -25,13 +25,11 @@ export const SearchArea = () => {
 
   useEffect(() => {
     const search = async () => {
-      const data = await fetchSearchWar(query);
+      const warData = await fetchSearchWar(query);
+      const personalityData = await fetchSearchPersonality(query);
       setSuggestions({
-        "Guerre": data,
-        "Commandants": [
-          { label: "Jules César", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg/1024px-Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg" },
-          { label: "Vercingétorix", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Vercing%C3%A9torix_stat%C3%A8re_Gallica_avers.jpg/1280px-Vercing%C3%A9torix_stat%C3%A8re_Gallica_avers.jpg" }
-        ],
+        "Guerre": warData,
+        "Commandants": personalityData,
         "Pays": [
           { label: "France", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Armoiries_r%C3%A9publique_fran%C3%A7aise.svg/132px-Armoiries_r%C3%A9publique_fran%C3%A7aise.svg.png" },
           { label: "Allemagne", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Coat_of_arms_of_Germany.svg/132px-Coat_of_arms_of_Germany.svg.png" },
@@ -40,7 +38,8 @@ export const SearchArea = () => {
         ]
       });
       console.log(suggestions);
-      console.log(data);
+      console.log(warData);
+      console.log(personalityData);
     };
     search();
 

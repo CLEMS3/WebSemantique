@@ -8,23 +8,7 @@ export function getRequestUrl(request: string) {
 }
 
 export const WAR_RESEARCH = (search: string) => ({
-  /*warResearch: `PREFIX dbo: <http://dbpedia.org/ontology/>
-PREFIX dbp: <http://dbpedia.org/property/>
-PREFIX dbr: <http://dbpedia.org/resource/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-SELECT DISTINCT ?label ?image
-WHERE {
-  ?war a dbo:MilitaryConflict ;
-       rdfs:label ?label ;
-       dbo:thumbnail ?image . # Récupère l'URL de l'image
-  FILTER (LANG(?label) = "fr")
-  FILTER (CONTAINS(LCASE(?label), LCASE("${search}")))
-}
-ORDER BY ?label
-LIMIT 3
-`,*/
-warResearch: `PREFIX dbo: <http://dbpedia.org/ontology/>
+  warResearch: `PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX dbp: <http://dbpedia.org/property/>
 PREFIX dbr: <http://dbpedia.org/resource/>
 
@@ -71,6 +55,25 @@ FILTER (LANG(?abstract) = "fr")
 ORDER BY ?label
 LIMIT 1
 
+`,
+});
+
+export const PERSONALITY_RESEARCH = (search: string) => ({
+  personalityResearch: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?label ?image
+WHERE {
+?conflict a dbo:MilitaryConflict;
+dbo:commander ?commander.
+          ?commander rdfs:label ?label ;
+          dbo:thumbnail ?image ;
+          dbo:abstract ?description .
+FILTER (LANG(?label) = "fr" && LANG(?description) = "fr" && CONTAINS(LCASE(?label), LCASE("${search}")))
+
+}
+LIMIT 3
 `,
 });
 
