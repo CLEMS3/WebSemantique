@@ -28,18 +28,30 @@ export const PersonPage: React.FC<PersonPageProps> = ({nameParam}) => {
             console.log(data);
         });
     }, []);
-    if (!dataPage) {
-        return null;
-    }
-    return (
-        <DataPage 
+    
+    if (dataPage) {
+        return (
+          <DataPage
             title={dataPage.title}
             text={dataPage.text}
             imageUrl={dataPage.imageUrl}
             list1={dataPage.list1}
             list2={dataPage.list2}
-        />
-    );
+          />
+        );
+      } else {
+        return (
+          <DataPage
+            title={"Houps !"}
+            text={
+              "Il semble qu'il n'y ait pas de données disponibles pour votre langue."
+            }
+            imageUrl={""}
+            list1={{ "": [{ label: "", appLink: "" }] }}
+            list2={{ "": [{ label: "", appLink: "" }] }}
+          />
+        );
+      }
 };
 
 export default PersonPage;
