@@ -17,22 +17,6 @@ export default function WarRoot() {
     const [sparqlResult, setSparqlResult] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    useEffect(() => {
-        const getSparqlResult = async () => {
-            try {
-                const data = await fetchAWarData();
-                console.log(data);
-                setSparqlResult(JSON.stringify(data));
-            } catch (err) {
-                setError("Failed to load cat fact");
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        getSparqlResult();
-    }, []);
 
     return (
         <div className="h-screen overflow-hidden bg-cover bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/La_Libert%C3%A9_guidant_le_peuple_-_Eug%C3%A8ne_Delacroix_-_Mus%C3%A9e_du_Louvre_Peintures_RF_129_-_apr%C3%A8s_restauration_2024.jpg/1024px-La_Libert%C3%A9_guidant_le_peuple_-_Eug%C3%A8ne_Delacroix_-_Mus%C3%A9e_du_Louvre_Peintures_RF_129_-_apr%C3%A8s_restauration_2024.jpg')]">

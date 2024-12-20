@@ -48,22 +48,27 @@ export const DISPLAY_WAR = (search: string) => ({
   warDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT DISTINCT ?label ?abstract ?image ?date ?place ?casualties ?result ?strength ?isPartOfMilitaryConflict ?commander
+SELECT DISTINCT ?label ?abstract ?image ?date (GROUP_CONCAT(DISTINCT CONCAT(STR(?labPlace), ", ", STR(?place)) ; separator="; ") AS ?places) ?casualties ?result (GROUP_CONCAT(DISTINCT CONCAT(STR(?labStren), ", ", STR(?strength)) ; separator="; ") AS ?strengths) (GROUP_CONCAT(DISTINCT CONCAT(STR(?labConf), ", ", STR(?isPartOfMilitaryConflict)) ; separator="; ") AS ?conflicts) (GROUP_CONCAT(DISTINCT CONCAT(STR(?labCom), ", ", STR(?commander)) ; separator="; ") AS ?commanders)
+
 WHERE {
   <${search}> rdfs:label ?label ;
                                               dbo:abstract ?abstract .
   
   OPTIONAL { <${search}> dbo:thumbnail ?image . }
   OPTIONAL { <${search}> dbo:date ?date . }
-  OPTIONAL { <${search}> dbo:place ?place . }
+  OPTIONAL { <${search}> dbo:place ?place .?place rdfs:label ?labPlace. }
   OPTIONAL { <${search}> dbo:casualties ?casualties . }
   OPTIONAL { <${search}> dbo:result ?result . }
-  OPTIONAL { <${search}> dbo:strength ?strength . }
-  OPTIONAL { <${search}> dbo:isPartOfMilitaryConflict ?isPartOfMilitaryConflict . }
-  OPTIONAL { <${search}> dbo:commander ?commander . }
+  OPTIONAL { <${search}> dbo:strength ?strength .?strenght rdfs:label ?labStren. }
+  OPTIONAL { <${search}> dbo:isPartOfMilitaryConflict ?isPartOfMilitaryConflict .?isPartOfMilitaryConflict  rdfs:label ?labConf. }
+  OPTIONAL { <${search}> dbo:commander ?commander . ?commander rdfs:label ?labCom.}
 
   FILTER (LANG(?label) = "fr")
   FILTER (LANG(?abstract) = "fr")
+  FILTER (LANG(?labCom)="fr")
+  FILTER (LANG(?labConf)="fr")
+  FILTER (LANG(?labPlace)="fr")
+  FILTER (LANG(?labStren)="fr")
 }
 LIMIT 1
 
