@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PERSONALITY_RESEARCH, PLACE_RESEARCH, DISPLAY_PLACE } from "./sparqlRequests";
+import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PERSONALITY_RESEARCH, DISPLAY_PERSON, PLACE_RESEARCH, DISPLAY_PLACE } from "./sparqlRequests";
 import { getRequestUrl } from "./sparqlRequests";
 import {getLastPartOfUrl} from "./utils";
 import { get } from "http";
@@ -163,6 +163,38 @@ export async function fetchSearchPersonality(request: string): Promise<Suggestio
   }
 }
 
+export async function fetchDisplayPerson(request: string): Promise<WarData> {
+  console.log(getRequestUrl(DISPLAY_PERSON(request).personDisplay));
+  try {
+    const response = await fetchSparql(
+      getRequestUrl(DISPLAY_PERSON(request).personDisplay)
+    );
+
+    const result = response.results.bindings[0]; // Premier résultat
+    if (!result) {
+      throw new Error("No data found");
+    }
+
+    // Transformation des données
+    const personData: WarData = {
+      title: result.label?.value || "Titre inconnu",
+      text: result.abstract?.value || "Aucune description disponible.",
+      imageUrl: result.thumbnail?.value || "",
+      list1: {},
+      list2: {},
+    };
+
+
+    console.log(personData);
+    return personData;
+  }
+
+  catch (error) {
+    console.error("Error fetching person data", error);
+    throw new Error("Failed to fetch person data");
+  }
+}
+
 export async function fetchDisplayPlace(request: string): Promise<WarData> {
   try {
     console.log(getRequestUrl(DISPLAY_PLACE(request).placeDisplay));
@@ -204,8 +236,8 @@ export async function fetchDisplayPlace(request: string): Promise<WarData> {
   }
 
   catch (error) {
-    console.error("Error fetching conflict data", error);
-    throw new Error("Failed to fetch conflict data");
+    console.error("Error fetching place data", error);
+    throw new Error("Failed to fetch place data");
   }
 
 }
