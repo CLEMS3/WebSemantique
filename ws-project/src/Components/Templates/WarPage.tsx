@@ -60,7 +60,7 @@ export const WarPage: React.FC<WarPageProps> = ({ nameParam }) => {
         text={
           "Il semble qu'il n'y ait pas de données disponibles pour votre langue."
         }
-        imageUrl={""}
+        imageUrl={"https://images.pond5.com/shocked-looking-proboscis-monkey-footage-096406324_iconl.jpeg"}
         list1={{ "": [{ label: "", appLink: "" }] }}
         list2={{ "": [{ label: "", appLink: "" }] }}
       />
