@@ -85,6 +85,27 @@ WHERE {
   FILTER (LANG(?label) = "fr")
   FILTER (LANG(?abstract) = "fr")
 }
+
+`,
+
+  relatedBattlesDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?label ?battle
+WHERE {
+?battle a dbo:MilitaryConflict;
+dbo:place <${search}>.
+ ?battle dbo:abstract ?abstract;
+rdfs:label ?label.
+  OPTIONAL { 
+    ?battle dbo:thumbnail ?thumbnail .
+  }
+  FILTER (LANG(?label) = "fr")
+  FILTER (LANG(?abstract) = "fr")
+}
+LIMIT 10
 `
 
 });
