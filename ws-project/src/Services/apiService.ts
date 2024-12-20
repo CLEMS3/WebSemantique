@@ -197,17 +197,21 @@ export async function fetchDisplayPerson(request: string): Promise<WarData> {
 
 export async function fetchDisplayPlace(request: string): Promise<WarData> {
   try {
-    console.log(getRequestUrl(DISPLAY_PLACE(request).placeDisplay));
-    console.log(DISPLAY_PLACE(request).placeDisplay);
     const response = await fetchSparql(
       getRequestUrl(DISPLAY_PLACE(request).placeDisplay)
     );
-    console.log(getRequestUrl(DISPLAY_WAR(request).warDisplay));
+
+    const battleResponse = await fetchSparql(
+      getRequestUrl(DISPLAY_PLACE(request).relatedBattlesDisplay)
+    );
 
     const result = response.results.bindings[0]; // Premier résultat
     if (!result) {
       throw new Error("No data found");
     }
+  
+    const battleResult = battleResponse.results.bindings;
+
 
     const processListToStrings = (data: any, category: string) => {
       return data.map((item: any) => {
@@ -226,7 +230,14 @@ export async function fetchDisplayPlace(request: string): Promise<WarData> {
       title: result.label?.value || "Titre inconnu",
       text: result.abstract?.value || "Aucune description disponible.",
       imageUrl: result.thumbnail?.value || "",
-      list1: {},
+      list1: {
+        "Batailles y ayant eu lieu": battleResult.length > 0
+          ? processListToStrings(
+              battleResult.map((binding: any) => binding.battle?.value),
+              "war" // Replace "country" with the appropriate category
+            )
+          : [{ label: "Non spécifiés", appLink: "" }],
+      },
       list2: {},
     };
 

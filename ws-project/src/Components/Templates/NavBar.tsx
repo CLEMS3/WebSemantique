@@ -11,20 +11,6 @@ const NavBar: React.FC = () => {
         <div className="text-xl font-bold">
           <a href="/"><Image alt="logo" style={{ width: 50 }} src={logo} /></a>
         </div>
-        <ul className="flex space-x-4">
-          <li>
-            <a href="/" className="hover:underline">Wars</a>
-          </li>
-          <li>
-            <a href="/about" className="hover:underline">Commanders</a>
-          </li>
-          <li>
-            <a href="/services" className="hover:underline">Countries</a>
-          </li>
-          <li>
-            <a href="/contact" className="hover:underline">Contact</a>
-          </li>
-        </ul>
       </div>
     </nav>
     );
