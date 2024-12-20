@@ -114,7 +114,7 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
     const warData: WarData = {
       title: result.label?.value || "Titre inconnu",
       text: result.abstract?.value || "Aucune description disponible.",
-      imageUrl: result.image?.value || "",
+      imageUrl: result.image?.value || "https://placehold.co/600x400?text=Pas+de+ressource+disponible",
       list1: {
         "Guerre": result.isPartOfMilitaryConflict
           ? processListToStrings([result.isPartOfMilitaryConflict.value], "war")
@@ -179,7 +179,7 @@ export async function fetchDisplayPerson(request: string): Promise<WarData> {
     const personData: WarData = {
       title: result.label?.value || "Titre inconnu",
       text: result.abstract?.value || "Aucune description disponible.",
-      imageUrl: result.thumbnail?.value || "",
+      imageUrl: result.thumbnail?.value || "https://placehold.co/600x400?text=Pas+de+ressource+disponible",
       list1: {},
       list2: {},
     };
@@ -196,6 +196,7 @@ export async function fetchDisplayPerson(request: string): Promise<WarData> {
 }
 
 export async function fetchDisplayPlace(request: string): Promise<WarData> {
+  console.log(getRequestUrl(DISPLAY_PLACE(request).placeDisplay));
   try {
     const response = await fetchSparql(
       getRequestUrl(DISPLAY_PLACE(request).placeDisplay)
@@ -229,7 +230,7 @@ export async function fetchDisplayPlace(request: string): Promise<WarData> {
     const placeData: WarData = {
       title: result.label?.value || "Titre inconnu",
       text: result.abstract?.value || "Aucune description disponible.",
-      imageUrl: result.thumbnail?.value || "",
+      imageUrl: result.thumbnail?.value || "https://placehold.co/600x400?text=Pas+de+ressource+disponible",
       list1: {
         "Batailles y ayant eu lieu": battleResult.length > 0
           ? processListToStrings(
