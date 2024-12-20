@@ -1,14 +1,14 @@
-import React from 'react';
-import DataPage from '../Organisms/DataPage';
-import {fetchDisplayWar} from '@/Services/apiService';
-import { useEffect } from 'react';
+import React from "react";
+import DataPage from "../Organisms/DataPage";
+import { fetchDisplayWar } from "@/Services/apiService";
+import { useEffect } from "react";
 
 interface DataPageProps {
-    title: string;
-    text: string;
-    imageUrl: string;
-    list1: { [key: string]: { label: string; appLink: string }[] }; 
-    list2: { [key: string]: { label: string; appLink: string }[] }; 
+  title: string;
+  text: string;
+  imageUrl: string;
+  list1: { [key: string]: { label: string; appLink: string }[] };
+  list2: { [key: string]: { label: string; appLink: string }[] };
 }
 
 // const warData: DataPageProps = {
@@ -29,35 +29,43 @@ interface DataPageProps {
 // };
 
 interface WarPageProps {
-    nameParam: string;
+  nameParam: string;
 }
 
+export const WarPage: React.FC<WarPageProps> = ({ nameParam }) => {
+  const [dataPage, setDataPage] = React.useState<DataPageProps | null>(null);
+  const name = "http://dbpedia.org/resource/" + nameParam;
 
+  useEffect(() => {
+    fetchDisplayWar(name).then((data) => {
+      setDataPage(data);
+      console.log(data);
+    });
+  }, []);
 
-
-export const WarPage: React.FC<WarPageProps> = ({nameParam}) => {
-    const [dataPage, setDataPage] = React.useState<DataPageProps | null>(null);
-    const name = "http://dbpedia.org/resource/" + nameParam;
-    
-
-    useEffect(() => {
-        fetchDisplayWar(name).then(data => {
-            setDataPage(data);
-            console.log(data);
-        });
-    }, []);
-    if (!dataPage) {
-        return null;
-    }
+  if (dataPage) {
     return (
-        <DataPage 
-            title={dataPage.title}
-            text={dataPage.text}
-            imageUrl={dataPage.imageUrl}
-            list1={dataPage.list1}
-            list2={dataPage.list2}
-        />
+      <DataPage
+        title={dataPage.title}
+        text={dataPage.text}
+        imageUrl={dataPage.imageUrl}
+        list1={dataPage.list1}
+        list2={dataPage.list2}
+      />
     );
+  } else {
+    return (
+      <DataPage
+        title={"Houps !"}
+        text={
+          "Il semble qu'il n'y ait pas de données disponibles pour votre langue."
+        }
+        imageUrl={""}
+        list1={{ "": [{ label: "", appLink: "" }] }}
+        list2={{ "": [{ label: "", appLink: "" }] }}
+      />
+    );
+  }
 };
 
 export default WarPage;
