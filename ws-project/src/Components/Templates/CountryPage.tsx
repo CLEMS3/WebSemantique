@@ -34,7 +34,7 @@ interface CountryPageProps {
 
 export const CountryPage: React.FC<CountryPageProps> = ({nameParam}) => {
     const [dataPage, setDataPage] = React.useState<DataPageProps | null>(null);
-    const name = "http://dbpedia.org/resource/" + nameParam;
+    const name = "http://dbpedia.org/resource/" + decodeURI(nameParam);
     console.log(nameParam);
     console.log(name);
     

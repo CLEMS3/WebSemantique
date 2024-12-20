@@ -34,7 +34,7 @@ interface WarPageProps {
 
 export const WarPage: React.FC<WarPageProps> = ({ nameParam }) => {
   const [dataPage, setDataPage] = React.useState<DataPageProps | null>(null);
-  const name = "http://dbpedia.org/resource/" + nameParam;
+  const name = "http://dbpedia.org/resource/" + decodeURI(nameParam);
 
   useEffect(() => {
     fetchDisplayWar(name).then((data) => {
