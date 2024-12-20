@@ -42,7 +42,6 @@ export const PLACE_RESEARCH = (search: string) => ({
   }
   LIMIT 3`,
 });
-  
 
 export const DISPLAY_WAR = (search: string) => ({
   warDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
@@ -71,12 +70,23 @@ WHERE {
   FILTER (LANG(?labStren)="fr")
 }
 LIMIT 1
-
-
-
 `,
 });
 
+export const DISPLAY_PERSON = (search: string) => ({
+  personDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?label ?abstract ?thumbnail
+WHERE {
+  <${search}> rdfs:label ?label ;
+                                        dbo:abstract ?abstract .
+  OPTIONAL { <${search}> dbo:thumbnail ?thumbnail . }
+  FILTER (LANG(?label) = "fr")
+  FILTER (LANG(?abstract) = "fr")
+}
+`,
+});
 
 export const DISPLAY_PLACE = (search: string) => ({
   placeDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
@@ -90,8 +100,28 @@ WHERE {
   FILTER (LANG(?label) = "fr")
   FILTER (LANG(?abstract) = "fr")
 }
-`
 
+`,
+
+  relatedBattlesDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?label ?battle
+WHERE {
+?battle a dbo:MilitaryConflict;
+dbo:place <${search}>.
+ ?battle dbo:abstract ?abstract;
+rdfs:label ?label.
+  OPTIONAL { 
+    ?battle dbo:thumbnail ?thumbnail .
+  }
+  FILTER (LANG(?label) = "fr")
+  FILTER (LANG(?abstract) = "fr")
+}
+LIMIT 10
+`,
 });
 
 export const PERSONALITY_RESEARCH = (search: string) => ({
@@ -111,7 +141,7 @@ FILTER (LANG(?label) = "fr" && LANG(?description) = "fr" && CONTAINS(LCASE(?labe
 }
 LIMIT 3
 `,
-}); 
+});
 
 export const sparqlRequestConstants = {
   guerreCivileDeCesar: `PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>

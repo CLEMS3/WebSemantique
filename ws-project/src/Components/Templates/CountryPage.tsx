@@ -34,7 +34,7 @@ interface CountryPageProps {
 
 export const CountryPage: React.FC<CountryPageProps> = ({nameParam}) => {
     const [dataPage, setDataPage] = React.useState<DataPageProps | null>(null);
-    const name = "http://dbpedia.org/resource/" + nameParam;
+    const name = "http://dbpedia.org/resource/" + decodeURI(nameParam);
     console.log(nameParam);
     console.log(name);
     
@@ -45,18 +45,29 @@ export const CountryPage: React.FC<CountryPageProps> = ({nameParam}) => {
             console.log(data);
         });
     }, []);
-    if (!dataPage) {
-        return null;
-    }
-    return (
-        <DataPage 
+    if (dataPage) {
+        return (
+          <DataPage
             title={dataPage.title}
             text={dataPage.text}
             imageUrl={dataPage.imageUrl}
             list1={dataPage.list1}
             list2={dataPage.list2}
-        />
-    );
+          />
+        );
+      } else {
+        return (
+          <DataPage
+            title={"Houps !"}
+            text={
+              "Il semble qu'il n'y ait pas de données disponibles pour votre langue."
+            }
+            imageUrl={"https://images.pond5.com/shocked-looking-proboscis-monkey-footage-096406324_iconl.jpeg"}
+            list1={{ "": [{ label: "", appLink: "" }] }}
+            list2={{ "": [{ label: "", appLink: "" }] }}
+          />
+        );
+      }
 };
 
 export default CountryPage;
