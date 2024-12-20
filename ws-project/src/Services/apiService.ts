@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PERSONALITY_RESEARCH, PLACE_RESEARCH, DISPLAY_PLACE } from "./sparqlRequests";
+import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PERSONALITY_RESEARCH, DISPLAY_PERSON, PLACE_RESEARCH, DISPLAY_PLACE } from "./sparqlRequests";
 import { getRequestUrl } from "./sparqlRequests";
 import {getLastPartOfUrl} from "./utils";
 import { get } from "http";
@@ -124,13 +124,13 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
           : [{ label: "Non spécifiés", appLink: "" }],
       },
       list2: {
-        "Date": result.date ? [result.date.value] : ["Date inconnue"],
+        "Date": result.date ? [{ label: result.date.value, appLink: ""}] : [{ label: "Date inconnue", appLink: "" }],
         "Lieux": result.place
           ? processListToStrings([result.place.value], "country")
           : [{ label: "Non spécifiés", appLink: "" }],
-        "Victimes": result.casualties ? [result.casualties.value] : ["Non spécifiées"],
-        "Issue": result.result ? [result.result.value] : ["Non spécifiée"],
-        "Forces en présence": result.strength ? [result.strength.value] : ["Non spécifiées"],
+        "Victimes": result.casualties ? [{ label:result.casualties.value, appLink: ""}] : [{ label: "Non spécifiées", appLink: "" }],
+        "Issue": result.result ? [{ label:result.result.value, appLink: ""}] : [{ label: "Non spécifiée", appLink: "" }],
+        "Forces en présence": result.strength ? [{ label:result.strength.value, appLink: ""}] : [{ label: "Non spécifiées", appLink: "" }],
       },
     };
     
@@ -160,6 +160,38 @@ export async function fetchSearchPersonality(request: string): Promise<Suggestio
   } catch (error) {
     console.error("Error fetching conflict data", error);
     throw new Error("Failed to fetch conflict data");
+  }
+}
+
+export async function fetchDisplayPerson(request: string): Promise<WarData> {
+  console.log(getRequestUrl(DISPLAY_PERSON(request).personDisplay));
+  try {
+    const response = await fetchSparql(
+      getRequestUrl(DISPLAY_PERSON(request).personDisplay)
+    );
+
+    const result = response.results.bindings[0]; // Premier résultat
+    if (!result) {
+      throw new Error("No data found");
+    }
+
+    // Transformation des données
+    const personData: WarData = {
+      title: result.label?.value || "Titre inconnu",
+      text: result.abstract?.value || "Aucune description disponible.",
+      imageUrl: result.thumbnail?.value || "",
+      list1: {},
+      list2: {},
+    };
+
+
+    console.log(personData);
+    return personData;
+  }
+
+  catch (error) {
+    console.error("Error fetching person data", error);
+    throw new Error("Failed to fetch person data");
   }
 }
 
@@ -215,8 +247,8 @@ export async function fetchDisplayPlace(request: string): Promise<WarData> {
   }
 
   catch (error) {
-    console.error("Error fetching conflict data", error);
-    throw new Error("Failed to fetch conflict data");
+    console.error("Error fetching place data", error);
+    throw new Error("Failed to fetch place data");
   }
 
 }

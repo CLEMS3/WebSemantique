@@ -15,7 +15,6 @@ export default function CountryRoot() {
       if (!name) {
         return <p>Loading...</p>;
       }
-    const [catFact, setCatFact] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
