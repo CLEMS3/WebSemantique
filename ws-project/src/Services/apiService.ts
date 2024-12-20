@@ -29,15 +29,6 @@ export async function fetchSparql(request: string): Promise<JSON> {
   }
 }
 
-// split link and label
-export async function splitLabelUrl(input: string): string[] {
-  const [label, url] = input.split(',');
-
-  // Si l'url est vide, renvoyer un tableau avec un élément vide pour l'URL
-  return [label, url || ''];
-}
-
-
 // fetch a wars data
 export async function fetchAWarData(): Promise<JSON> {
   try {
