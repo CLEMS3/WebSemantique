@@ -88,15 +88,19 @@ export async function fetchSearchPlace(request: string): Promise<Suggestion[]> {
 
 export async function fetchDisplayWar(request: string): Promise<WarData> {
   try {
+    console.log(getRequestUrl(DISPLAY_WAR(request).warDisplay));
     const response = await fetchSparql(
       getRequestUrl(DISPLAY_WAR(request).warDisplay)
     );
-    console.log(getRequestUrl(DISPLAY_WAR(request).warDisplay));
+    const battleResponse = await fetchSparql(
+      getRequestUrl(DISPLAY_WAR(request).relatedPlacesDisplay)
+    );
 
     const result = response.results.bindings[0]; // Premier résultat
     if (!result) {
       throw new Error("No data found");
     }
+    const placeResult = battleResponse.results.bindings;
 
     const processListToStrings = (data: any, category: string) => {
       return data.map((item: any) => {
@@ -125,8 +129,8 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
       },
       list2: {
         "Date": result.date ? [{ label: result.date.value, appLink: ""}] : [{ label: "Date inconnue", appLink: "" }],
-        "Lieux": result.place
-          ? processListToStrings([result.place.value], "country")
+        "Lieux": placeResult.length > 0
+          ? processListToStrings(placeResult.map((binding: any) => binding.place?.value),"country")
           : [{ label: "Non spécifiés", appLink: "" }],
         "Victimes": result.casualties ? [{ label:result.casualties.value, appLink: ""}] : [{ label: "Non spécifiées", appLink: "" }],
         "Issue": result.result ? [{ label:result.result.value, appLink: ""}] : [{ label: "Non spécifiée", appLink: "" }],

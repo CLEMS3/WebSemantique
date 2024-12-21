@@ -47,7 +47,7 @@ export const DISPLAY_WAR = (search: string) => ({
   warDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT DISTINCT ?label ?abstract ?image ?date ?place ?casualties ?result strength ?isPartOfMilitaryConflict ?commander
+SELECT DISTINCT ?label ?abstract ?image ?date ?casualties ?result ?strength ?isPartOfMilitaryConflict ?commander
 
 WHERE {
   <${search}> rdfs:label ?label ;
@@ -55,7 +55,6 @@ WHERE {
   
   OPTIONAL { <${search}> dbo:thumbnail ?image . }
   OPTIONAL { <${search}> dbo:date ?date . }
-  OPTIONAL { <${search}> dbo:place ?place . }
   OPTIONAL { <${search}> dbo:casualties ?casualties . }
   OPTIONAL { <${search}> dbo:result ?result . }
   OPTIONAL { <${search}> dbo:strength ?strength .}
@@ -66,6 +65,20 @@ WHERE {
   FILTER (LANG(?abstract) = "fr")
 }
 LIMIT 1
+`,
+
+relatedPlacesDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?label ?place
+WHERE {
+<${search}> rdfs:label ?label ;
+dbo:place ?place.
+FILTER (LANG(?label) = "fr")
+}
+LIMIT 100
 `,
 });
 
