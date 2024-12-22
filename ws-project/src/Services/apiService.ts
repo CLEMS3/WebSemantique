@@ -3,6 +3,7 @@ import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PERSONALITY_RESEARCH
 import { getRequestUrl } from "./sparqlRequests";
 import {getLastPartOfUrl} from "./utils";
 import { get } from "http";
+import { constrainedMemory } from "process";
 
 interface Suggestion {
   label: string;
@@ -95,13 +96,23 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
     const battleResponse = await fetchSparql(
       getRequestUrl(DISPLAY_WAR(request).relatedPlacesDisplay)
     );
-
+    const commanderResponse = await fetchSparql(
+      getRequestUrl(DISPLAY_WAR(request).relatedCommanderDisplay)
+    );
+    const strengthResponse = await fetchSparql(
+      getRequestUrl(DISPLAY_WAR(request).relatedStrengthsDisplay)
+    );
+    const conflictResponse = await fetchSparql(
+      getRequestUrl(DISPLAY_WAR(request).relatedIsPartOfMilitaryConflictDisplay)
+    );
     const result = response.results.bindings[0]; // Premier résultat
     if (!result) {
       throw new Error("No data found");
     }
     const placeResult = battleResponse.results.bindings;
-
+    const commanderResult = commanderResponse.results.bindings;
+    const strengthResult = strengthResponse.results.bindings;
+    const conflictResult = conflictResponse.results.bindings;
     const processListToStrings = (data: any, category: string) => {
       return data.map((item: any) => {
         // Récupère la dernière partie de l'URL (ex. Decimus_Junius_Brutus_Albinus)
@@ -113,18 +124,19 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
         return { label, appLink };
       });
     };
-
+    console.log(strengthResult);
+    console.log(result);
     // Transformation des données
     const warData: WarData = {
       title: result.label?.value || "Titre inconnu",
       text: result.abstract?.value || "Aucune description disponible.",
       imageUrl: result.image?.value || "https://placehold.co/600x400?text=Pas+de+ressource+disponible",
       list1: {
-        "Guerre": result.isPartOfMilitaryConflict
-          ? processListToStrings([result.isPartOfMilitaryConflict.value], "war")
+        "Guerre": conflictResult.length > 0
+          ? processListToStrings(conflictResult.map((binding: any) => binding.isPartOfMilitaryConflict?.value), "war")
           : [{ label: "Non spécifiée", appLink: "" }],
-        "Commandants": result.commander
-          ? processListToStrings([result.commander.value], "commander")
+        "Commandants": commanderResult.length > 0
+          ? processListToStrings(commanderResult.map((binding: any) => binding.commander?.value), "commander")
           : [{ label: "Non spécifiés", appLink: "" }],
       },
       list2: {
@@ -134,7 +146,7 @@ export async function fetchDisplayWar(request: string): Promise<WarData> {
           : [{ label: "Non spécifiés", appLink: "" }],
         "Victimes": result.casualties ? [{ label:result.casualties.value, appLink: ""}] : [{ label: "Non spécifiées", appLink: "" }],
         "Issue": result.result ? [{ label:result.result.value, appLink: ""}] : [{ label: "Non spécifiée", appLink: "" }],
-        "Forces en présence": result.strength ? [{ label:result.strength.value, appLink: ""}] : [{ label: "Non spécifiées", appLink: "" }],
+        "Forces en présence": strengthResult.length > 0 ? strengthResult.map(item => ({ label: (item.strength.value).toString(), appLink: "" })) : [{ label: "Non spécifiés", appLink: "" }],
       },
     };
     

@@ -47,7 +47,7 @@ export const DISPLAY_WAR = (search: string) => ({
   warDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT DISTINCT ?label ?abstract ?image ?date ?casualties ?result ?strength ?isPartOfMilitaryConflict ?commander
+SELECT DISTINCT ?label ?abstract ?image ?date ?casualties ?result
 
 WHERE {
   <${search}> rdfs:label ?label ;
@@ -57,9 +57,6 @@ WHERE {
   OPTIONAL { <${search}> dbo:date ?date . }
   OPTIONAL { <${search}> dbo:casualties ?casualties . }
   OPTIONAL { <${search}> dbo:result ?result . }
-  OPTIONAL { <${search}> dbo:strength ?strength .}
-  OPTIONAL { <${search}> dbo:isPartOfMilitaryConflict ?isPartOfMilitaryConflict .}
-  OPTIONAL { <${search}> dbo:commander ?commander . }
 
   FILTER (LANG(?label) = "fr")
   FILTER (LANG(?abstract) = "fr")
@@ -76,6 +73,48 @@ SELECT DISTINCT ?label ?place
 WHERE {
 <${search}> rdfs:label ?label ;
 dbo:place ?place.
+FILTER (LANG(?label) = "fr")
+}
+LIMIT 100
+`,
+
+relatedStrengthsDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?label ?strength
+WHERE {
+<${search}> rdfs:label ?label ;
+dbo:strength ?strength.
+FILTER (LANG(?label) = "fr")
+}
+LIMIT 100
+`,
+
+relatedIsPartOfMilitaryConflictDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?label ?place
+WHERE {
+<${search}> rdfs:label ?isPartOfMilitaryConflict ;
+dbo:isPartOfMilitaryConflict ?isPartOfMilitaryConflict.
+FILTER (LANG(?label) = "fr")
+}
+LIMIT 100
+`,
+
+relatedCommanderDisplay: `PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?label ?commander
+WHERE {
+<${search}> rdfs:label ?label ;
+dbo:commander ?commander .
 FILTER (LANG(?label) = "fr")
 }
 LIMIT 100
