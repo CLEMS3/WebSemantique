@@ -3,7 +3,6 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 import {getLastPartOfUrl} from "@/Services/utils";
-import { get } from "https";
 
 interface Suggestion {
   label: string;

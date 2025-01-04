@@ -2,8 +2,6 @@ import axios from "axios";
 import { sparqlRequestConstants, WAR_RESEARCH, DISPLAY_WAR, PERSONALITY_RESEARCH, DISPLAY_PERSON, PLACE_RESEARCH, DISPLAY_PLACE } from "./sparqlRequests";
 import { getRequestUrl } from "./sparqlRequests";
 import {getLastPartOfUrl} from "./utils";
-import { get } from "http";
-import { constrainedMemory } from "process";
 
 interface Suggestion {
   label: string;
@@ -20,9 +18,15 @@ interface WarData {
 }
 
 // fetch a sparql result
-export async function fetchSparql(request: string): Promise<JSON> {
+interface SparqlResponse {
+  results: {
+    bindings: any[];
+  };
+}
+
+export async function fetchSparql(request: string): Promise<SparqlResponse> {
   try {
-    const response = await axios.get<JSON>(request);
+    const response = await axios.get<SparqlResponse>(request);
     return response.data;
   } catch (error) {
     console.error("Error fetching data", error);
