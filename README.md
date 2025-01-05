@@ -57,7 +57,7 @@ Le projet comporte 4 pages principales :
    ```
 2. Ouvrez votre navigateur à l’adresse : [http://localhost:3000](http://localhost:3000).
 
-### Build pour la production
+### Lancement pour la production
 1. Générez les fichiers optimisés :
    ```bash
    npm run build
