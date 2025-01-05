@@ -43,7 +43,7 @@ Le projet comporte 4 pages principales :
 1. Clonez le dépôt GitHub :
    ```bash
    git clone https://github.com/CLEMS3/WebSemantique.git
-   cd ws-project
+   cd WebSemantique
    ```
 2. Installez les dépendances :
    ```bash
