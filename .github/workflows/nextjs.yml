@@ -52,7 +52,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: ws-project/${{ steps.detect-package-manager.outputs.manager }}
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache-dependency-path: ws-project/${{ steps.detect-package-manager.outputs.manager }}.lock
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
