@@ -62,10 +62,12 @@ Le projet comporte 4 pages principales :
    ```bash
    npm run build
    ```
+   A cette étape, il se peut que la commande tourne sans rien faire. Cela est lié à un problème de cache. Pour règler le problème, supprimez les dossier .next et nodes_modules, ainsi que le fichier package-lock.json, puis réexecutez les commandes (`npm install` puis `npm run build`)
 2. Lancez le serveur de production :
    ```bash
    npm start
    ```
+3. Ouvrez votre navigateur à l’adresse : [http://localhost:3000](http://localhost:3000).
 
 ## Contributeurs
 - BRUNET Armand (https://github.com/armynion)
